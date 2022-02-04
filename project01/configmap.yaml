@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  myapp-configmap
+  labels:
+    name:  myapp-configmap
+data:
+#---------------------------------------- System Configuration  -------------------------------#
+  PROJECT_NAME: 'ARGOCD'
