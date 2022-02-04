@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.service.name }}-configmap
+  labels:
+    name: {{ .Values.service.name }}-configmap
+data:
+#---------------------------------------- System Configuration  -------------------------------#
+  {{- toYaml .Values.config.data | nindent 2 }}

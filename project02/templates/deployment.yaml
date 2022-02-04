@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service.name }}
+  labels:
+    app: {{ .Values.service.name }}
+  annotations:
+    seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.service.name }}
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.service.name }}
+        track: stable
+        svc: {{ .Values.projectname }}
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: {{ .Values.service.name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources:
+        {{- toYaml .Values.resources | nindent 10 }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        #------- ENV ----------------------------#
+        envFrom:
+          {{- if .Values.config.enabled }}
+        - configMapRef:
+            name: {{ .Values.service.name }}-configmap
+          {{ end }}
+          {{- if .Values.secret.enabled }}
+        - secretRef:
+            name: {{ .Values.secret.name }}
+          {{ end }}
+        #------- PORT: Services config ----------#
+        ports:
+          - name: {{ .Values.service.name }}
+            containerPort: {{ .Values.service.port }}
+            protocol: TCP
