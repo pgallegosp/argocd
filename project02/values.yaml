@@ -26,9 +26,10 @@ podSecurityContext: #{}
 securityContext: #{}
 
 service:
-  name: 
+  name: helm-helloworld
   type: NodePort
   port: 9000
+  targetport: 80
 
 ingress:
   enabled: false

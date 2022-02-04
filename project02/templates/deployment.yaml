@@ -34,10 +34,6 @@ spec:
         - configMapRef:
             name: {{ .Values.service.name }}-configmap
           {{ end }}
-          {{- if .Values.secret.enabled }}
-        - secretRef:
-            name: {{ .Values.secret.name }}
-          {{ end }}
         #------- PORT: Services config ----------#
         ports:
           - name: {{ .Values.service.name }}
